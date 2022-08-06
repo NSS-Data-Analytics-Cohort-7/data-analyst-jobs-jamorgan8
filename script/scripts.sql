@@ -90,15 +90,17 @@ FROM data_analyst_jobs
 LIMIT 10;
 --to visualize table
 
-SELECT days_since_posting, COUNT(domain), domain
+SELECT days_since_posting, COUNT(domain), domain, skill
 FROM data_analyst_jobs
 WHERE days_since_posting > 21
-      AND skill = 'SQL'
+      AND skill LIKE '%SQL%'
       AND domain IS NOT NULL
-GROUP BY domain, days_since_posting
+GROUP BY domain, days_since_posting, skill
 ORDER BY count DESC;
 
--- The 3 industries are Consulting and Business Services (5 jobs > 3 weeks), Consumer Goods and Services (2 jobs > 3 weeks), and Computers and Electronics (1 job > 3 weeks)
+/*The 3 industries are: Banks and Financial Services (6 jobs > 3 weeks)
+                        Consulting and Business Services (7 jobs > 3 weeks)
+                        Insurance Healthcare (3 jobs > 3 weeks)*/
 
 
 
