@@ -68,8 +68,37 @@ ORDER BY avg_star DESC;
 --3 way tie between GM, Unilever, and Microsoft
 
 --Q11: Find all the job titles that contain the word ‘Analyst’. How many different job titles are there?
-SELECT 
-FROM
+SELECT DISTINCT(title)
+FROM data_analyst_jobs
+WHERE title LIKE '%Analyst%';
+
+SELECT COUNT(DISTINCT(title))
+FROM data_analyst_jobs
+WHERE title LIKE '%Analyst%';
+--754 jobs with Analyst in the title
+
+--Q12: How many different job titles do not contain either the word ‘Analyst’ or the word ‘Analytics’? What word do these positions have in common?
+SELECT title
+FROM data_analyst_jobs
+WHERE title NOT LIKE '%ANALY%'
+    AND title NOT LIKE '%_naly%';
+-- 4 job titles. All appear to involve Tableau
+
+--BONUS: You want to understand which jobs requiring SQL are hard to fill. Find the number of jobs by industry (domain) that require SQL and have been posted longer than 3 weeks.
+SELECT *
+FROM data_analyst_jobs
+LIMIT 10;
+--to visualize table
+
+SELECT days_since_posting, COUNT(domain), domain
+FROM data_analyst_jobs
+WHERE days_since_posting > 21
+      AND skill = 'SQL'
+      AND domain IS NOT NULL
+GROUP BY domain, days_since_posting
+ORDER BY count DESC;
+
+-- The 3 industries are Consulting and Business Services (5 jobs > 3 weeks), Consumer Goods and Services (2 jobs > 3 weeks), and Computers and Electronics (1 job > 3 weeks)
 
 
 
