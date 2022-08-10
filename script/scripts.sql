@@ -23,8 +23,8 @@ WHERE location = 'TN' OR location = 'KY';
 
 --Q4: How many postings in TN have a star rating above 4?
 SELECT COUNT (*) FROM data_analyst_jobs
-WHERE star_rating > '4';
---Answer-- 416
+WHERE location = 'TN' AND star_rating > '4';
+--Answer-- 3
 
 --Q5: How many postings in the datset have a review count between 500 and 1000?
 SELECT COUNT (*) FROM data_analyst_jobs
@@ -33,11 +33,12 @@ WHERE review_count > '500' AND review_count < '1000';
 
 /*Q6: Show the average star rating for companies in each state. 
 The output should show the state as state and the average rating for the state as avg_rating. Which state shows the highest average rating?*/
-SELECT location AS state, AVG(star_rating) AS  avg_rating
+SELECT location AS state, AVG(star_rating) AS avg_rating
 FROM data_analyst_jobs
+WHERE location IS NOT NULL AND star_rating IS NOT NULL
 GROUP BY state
 ORDER BY avg_rating DESC;
---Answer-- Nevada is the highest, West Virgina is the lowest
+--Answer-- Nebraska is the highest, West Virgina is the lowest
 
 --Q7: Select unique job titles from data. How many are there?
 SELECT COUNT(DISTINCT(title))
@@ -53,10 +54,10 @@ WHERE location = 'CA';
 /*Q9: Find the name of each company and its average star 
 rating for all companies that have more than 5000 reviews 
 across all locations. How many companies are there with more that 5000 reviews across all locations? */
-SELECT company, AVG(star_rating) AS avg_star, review_count
+SELECT company, ROUND(AVG(star_rating),2) AS avg_star, review_count
 FROM data_analyst_jobs
-WHERE review_count > '5000'
-      AND company IS NOT NULL
+WHERE company IS NOT NULL
+      AND review_count > '5000'
 GROUP BY company, review_count
 ORDER BY review_count DESC;
 --Answer-- 45 companies where reviews>5k
@@ -69,7 +70,7 @@ WHERE review_count > '5000'
       AND company IS NOT NULL
 GROUP BY company, review_count
 ORDER BY avg_star DESC;
---Answer-- 3 way tie between American Express, Kaiser Permanente, and GM
+--Answer-- 6 way tie between American Express, Kaiser Permanente, and GM. Rating is 4.1999999809
 
 --Q11: Find all the job titles that contain the word ‘Analyst’. How many different job titles are there?
 SELECT DISTINCT(title)
@@ -98,17 +99,17 @@ FROM data_analyst_jobs
 LIMIT 10;
 --to visualize table
 
-SELECT days_since_posting, COUNT(domain), domain, skill
+SELECT COUNT(domain), domain
 FROM data_analyst_jobs
 WHERE days_since_posting > 21
       AND skill LIKE '%SQL%'
       AND domain IS NOT NULL
-GROUP BY domain, days_since_posting, skill
+GROUP BY domain
 ORDER BY count DESC;
 
-/*--Answer-- The 3 industries are: Banks and Financial Services (6 jobs > 3 weeks)
-                        Consulting and Business Services (7 jobs > 3 weeks)
-                        Insurance Healthcare (3 jobs > 3 weeks)*/
+/*--Answer-- The 3 industries are: Internet and Software (62 jobs > 3 weeks)
+                        Banks and Financial Services (61 jobs > 3 weeks)
+                        Consulting and Business Services (57 jobs > 3 weeks)*/
                         
 
 
